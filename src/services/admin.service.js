@@ -1,5 +1,11 @@
 const { Sequelize } = require('sequelize');
 
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @returns best profession
+ */
 const getBestProfession = async (req, res) => {
     const { Profile } = req.app.get('models');
     const { start, end } = req.query;
@@ -33,7 +39,7 @@ const getBestProfession = async (req, res) => {
         });
 
         if (!bestProfession) {
-            return res.status(404).json({ message: 'No profession found out with given date range' });
+            return res.status(404).json({ message: 'No profession found with given date range' });
         }
 
         return res.json({
@@ -47,6 +53,53 @@ const getBestProfession = async (req, res) => {
     }
 };
 
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @returns best clients
+ */
+const getBestClients = async (req, res) => {
+    const { Profile } = req.app.get('models');
+    const { start, end } = req.query;
+    
+    if (!start || !end) {
+        return res.status(400).json({ message: 'Start and End date is not present. Please provide it in YYYY-MM-DD format' });
+    }
+
+    try {
+        const bestClients = await Profile.findAll({
+            where: { type: 'client' },
+            attributes: [
+                'id',
+                [Sequelize.literal("firstName || ' ' || lastName"), 'fullName'],
+                [Sequelize.literal(`(
+                    SELECT SUM(Jobs.price) 
+                    FROM Jobs 
+                    INNER JOIN Contracts ON Jobs.ContractId = Contracts.id 
+                    WHERE Contracts.ClientId = Profile.id 
+                    AND Jobs.paid = 1
+                    AND Jobs.paymentDate BETWEEN '${start}' AND '${end}'
+                )`), 'paid']
+            ],
+            group: ['Profile.id'],
+            order: [[Sequelize.literal('paid'), 'DESC']],
+            limit: 2,
+            raw: true
+        });
+
+        if(!bestClients.length) {
+            return res.status(404).json({ message: 'No clients found with given date range' });
+        }
+
+        return res.json(bestClients);
+    } catch (error) {
+        console.error("Error while fetching best clients", error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
 module.exports = {
-    getBestProfession
+    getBestProfession,
+    getBestClients
 }
