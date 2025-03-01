@@ -1,3 +1,9 @@
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @returns after successfully depositing amount in client's balance
+ */
 const depositMoney = async (req, res) => {
     const { Profile, Job, Contract } = req.app.get('models');
     const { userId } = req.params;
@@ -48,7 +54,7 @@ const depositMoney = async (req, res) => {
         return res.status(200).json({ message: 'Deposit successful' });
     } catch (error) {
         console.error("Error while depositing amount in client's balance", error);
-        res.status(500).json({ message: 'Internal server error' });
+        return res.status(500).json({ message: 'Internal server error' });
     }
 };
 

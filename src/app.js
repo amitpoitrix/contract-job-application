@@ -5,6 +5,7 @@ const {getProfile} = require('./middleware/getProfile');
 const {getAllContracts} = require('./services/contracts.service')
 const {getAllUnpaidJobs, jobPaymentByClient} = require('./services/jobs.service')
 const {depositMoney} = require('./services/balances.service')
+const {getBestProfession} = require('./services/admin.service')
 
 const app = express();
 
@@ -54,6 +55,11 @@ app.post('/jobs/:job_id/pay', getProfile, jobPaymentByClient);
  * @returns after successfully depositing amount in client's balance
  */
 app.post('/balances/deposit/:userId', getProfile, depositMoney);
+
+/**
+ * @returns best profession based on date range
+ */
+app.get('/admin/best-profession', getProfile, getBestProfession);
 
 
 module.exports = app;
