@@ -26,8 +26,8 @@ app.get('/contracts/:id',getProfile ,async (req, res) =>{
     
     if(!contract) return res.status(404).end();
 
-    res.json(contract);
-})
+    return res.json(contract);
+});
 
 
 /**
@@ -47,16 +47,51 @@ app.get('/contracts', getProfile, async (req, res) => {
             }
         });
 
-        if(!contracts) {
+        if(!contracts.length) {
             return res.status(404).json({message: "Contracts not found"});
         }
 
-        res.json(contracts);
-
+        return res.json(contracts);
     } catch (error) {
         console.error('Error fetching contracts:', error);
-        res.status(500).json({ message: 'Internal Server Error' });
+        return res.status(500).json({ message: 'Internal Server Error' });
     }
-})
+});
+
+
+/**
+ * @returns all the unpaid jobs for a active contract user's
+ */
+app.get('/jobs/unpaid', getProfile, async(req, res) => {
+    const {Job, Contract} = req.app.get('models');
+    const profileId = req.profile.id;
+
+    try {
+        const unpaidJobs = await Job.findAll({
+            where: {
+                [Sequelize.Op.or]: [
+                    { paid: false },
+                    { paid: null }
+                ],
+            },
+            include: {
+                model: Contract,
+                where: {
+                    status: 'in_progress',
+                    [req.profile.type === 'client' ? 'ClientId': 'ContractorId']: profileId
+                }
+            }
+        });
+        
+        if(!unpaidJobs.length) {
+            return res.status(404).json({message: "No unpaid jobs found"});
+        }
+        
+        return res.json(unpaidJobs);
+    } catch (error) {
+        console.error('Error fetching unpaid jobs: ', error);
+        return res.status(500).json({message: 'Internal Server Error'});
+    }
+});
 
 module.exports = app;
