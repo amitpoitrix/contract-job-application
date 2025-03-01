@@ -4,6 +4,7 @@ const {sequelize} = require('./model')
 const {getProfile} = require('./middleware/getProfile');
 const {getAllContracts} = require('./services/contracts.service')
 const {getAllUnpaidJobs, jobPaymentByClient} = require('./services/jobs.service')
+const {depositMoney} = require('./services/balances.service')
 
 const app = express();
 
@@ -48,6 +49,11 @@ app.get('/jobs/unpaid', getProfile, getAllUnpaidJobs);
  * @return after successfull payment for the job by client
  */
 app.post('/jobs/:job_id/pay', getProfile, jobPaymentByClient);
+
+/**
+ * @returns after successfully depositing amount in client's balance
+ */
+app.post('/balances/deposit/:userId', getProfile, depositMoney);
 
 
 module.exports = app;
