@@ -14,16 +14,13 @@ app.set('models', sequelize.models)
  */
 app.get('/contracts/:id',getProfile ,async (req, res) =>{
     const {Contract} = req.app.get('models');
-    const {id} = req.params;
+    const {id: contractId} = req.params;
     const profileId = req.profile.id;
 
     const contract = await Contract.findOne({
         where: {
-            id,
-            [Sequelize.Op.or]: [
-                {ClientId: profileId},
-                {ContractorId: profileId}
-            ]
+            id: contractId,
+            [req.profile.type === 'client' ? 'ClientId': 'ContractorId']: profileId
         }
     });
     
@@ -31,4 +28,35 @@ app.get('/contracts/:id',getProfile ,async (req, res) =>{
 
     res.json(contract);
 })
+
+
+/**
+ * @returns all the non-terminated contracts
+ */
+app.get('/contracts', getProfile, async (req, res) => {
+    const {Contract} = req.app.get('models');
+    const profileId = req.profile.id;
+
+    try {
+        const contracts = await Contract.findAll({
+            where: {
+                [req.profile.type === 'client' ? 'ClientId': 'ContractorId']: profileId,
+                status: {
+                    [Sequelize.Op.not]: 'terminated'
+                }
+            }
+        });
+
+        if(!contracts) {
+            return res.status(404).json({message: "Contracts not found"});
+        }
+
+        res.json(contracts);
+
+    } catch (error) {
+        console.error('Error fetching contracts:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+})
+
 module.exports = app;
