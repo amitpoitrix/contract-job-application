@@ -53,7 +53,6 @@ const depositMoney = async (req, res) => {
 
         return res.status(200).json({ message: 'Deposit successful' });
     } catch (error) {
-        console.error("Error while depositing amount in client's balance", error);
         return res.status(500).json({ message: 'Internal server error' });
     }
 };

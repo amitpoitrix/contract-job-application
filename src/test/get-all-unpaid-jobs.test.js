@@ -20,8 +20,6 @@ jest.mock('../model', () => ({
     },
 }));
 
-jest.setTimeout(10000);
-
 describe('GET /jobs/unpaid', () => {
     let server;
 

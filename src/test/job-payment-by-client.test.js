@@ -25,8 +25,6 @@ jest.mock('../model', () => ({
     },
 }));
 
-jest.setTimeout(10000);
-
 describe('POST /jobs/:job_id/pay', () => {
     let server;
 
