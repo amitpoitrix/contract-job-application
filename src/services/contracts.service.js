@@ -20,7 +20,6 @@ const getAllContracts = async (req, res) => {
 
         return res.json(contracts);
     } catch (error) {
-        console.error('Error fetching contracts:', error);
         return res.status(500).json({ message: 'Internal Server Error' });
     }
 }
