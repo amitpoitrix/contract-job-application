@@ -13,10 +13,7 @@ const getAllUnpaidJobs = async(req, res) => {
     try {
         const unpaidJobs = await Job.findAll({
             where: {
-                [Sequelize.Op.or]: [
-                    { paid: false },
-                    { paid: null }
-                ],
+                paid: null
             },
             include: {
                 model: Contract,
@@ -33,7 +30,6 @@ const getAllUnpaidJobs = async(req, res) => {
         
         return res.json(unpaidJobs);
     } catch (error) {
-        console.error('Error fetching unpaid jobs: ', error);
         return res.status(500).json({message: 'Internal Server Error'});
     }
 }
@@ -106,7 +102,6 @@ const jobPaymentByClient = async (req, res) => {
         return res.status(200).json({ message: 'Payment successful' });
 
     } catch (error) {
-        console.error("Error while paying for job by client to contractor", error);
         return res.status(500).json({ message: 'Internal server error' });
     }
 }
