@@ -48,7 +48,6 @@ const getBestProfession = async (req, res) => {
         });
 
     } catch (error) {
-        console.error("Error while fetching best profession", error);
         return res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -94,7 +93,6 @@ const getBestClients = async (req, res) => {
 
         return res.json(bestClients);
     } catch (error) {
-        console.error("Error while fetching best clients", error);
         return res.status(500).json({ message: 'Internal server error' });
     }
 };

@@ -39,11 +39,6 @@ describe('POST /balances/deposit/:userId', () => {
     beforeEach(() => {
         jest.clearAllMocks();
 
-        sequelize.transaction.mockImplementation(async (callback) => {
-            const t = { id: 'mock-transaction' };
-            return await callback(t);
-        });
-
         getProfile.mockImplementation((req, res, next) => {
             req.profile = { id: '1', type: 'client' };
             next();
