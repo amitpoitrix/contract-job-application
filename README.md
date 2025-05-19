@@ -1,4 +1,4 @@
-# Contract Job based Node.js Application using ExpressJS Framework
+# Contract Job Application
 
 ## Data Models
 
