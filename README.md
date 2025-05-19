@@ -77,12 +77,6 @@ Below is a list of the required APIs for the application.
 ]
 ```
 
-## Going Above and Beyond the Requirements
-
-Given the time expectations for this exercise, we don't expect anyone to submit anything super fancy. However, if you find yourself with extra time, any extra credit item(s) that showcase your unique strengths would be awesome! 🙌
-
-For example, writing some unit tests or a simple frontend demonstrating calls to your new APIs would be great.
-
 ## Submitting the Assignment
 
 When you've finished the assignment, zip your repo (make sure to include the .git folder) and send us the zip file.
