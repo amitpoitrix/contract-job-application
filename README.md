@@ -76,9 +76,3 @@ Below is a list of the required APIs for the application.
     }
 ]
 ```
-
-## Submitting the Assignment
-
-When you've finished the assignment, zip your repo (make sure to include the .git folder) and send us the zip file.
-
-Thank you and good luck! 🙏
