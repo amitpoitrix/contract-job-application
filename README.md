@@ -1,10 +1,4 @@
-# DEEL BACKEND TASK
-
-💫 Welcome! 🎉
-
-This backend exercise involves building a Node.js/Express.js app that will serve a REST API.
-
-There is not a strict time limit to complete this task, but we expect that you will need to spend between 3-5 hours to meet the requirements. Make sure to submit your test only when you are confident that it meets all the requirements and you are satisfied with the quality of the project.
+# Contract Job based Node.js Application using ExpressJS Framework
 
 ## Data Models
 
